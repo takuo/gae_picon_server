@@ -1,0 +1,10 @@
+application: picon
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /.*
+  login: required
+  script: main.py
