@@ -1,5 +1,8 @@
 from google.appengine.ext import db
 
+class Settings(db.Model):
+    token = db.StringProperty()
+
 class PiUser(db.Model):
     account = db.UserProperty(required=True)
     token  = db.StringProperty(required=True)
