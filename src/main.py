@@ -105,7 +105,7 @@ class DashBoardHandler(webapp.RequestHandler):
 
         query = db.GqlQuery("SELECT * from PiDevice WHERE owner = :1", c2dmuser.account)
         if query.count() > 0:
-            devices = query.fetch()
+            devices = query.fetch(1000)
             table = "<table><tr><th>enable</th><th>ID</th></tr>\n"
             for dev in devices:
                 tr = "<tr><td>%s</td><td>%s</td></tr>\n" % (dev.active, dev.devid)
