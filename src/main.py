@@ -4,11 +4,13 @@
 # This program can be (re)distributed under GPLv2
 #
 
+import os
 import datetime
 import time
 import hashlib
 from google.appengine.api import users
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import db
 from picon.model import PiDevice
@@ -98,24 +100,20 @@ class DashBoardHandler(webapp.RequestHandler):
                                 create=datetime.datetime.now())
             c2dmuser.put()
 
-        string = "<div style='float:right'><b>%s</b> | <a href='%s'>Sign out</a></div>" % (c2dmuser.account.email(), users.create_logout_url('/'))
-        string += "<h1>Dashboard</h1>"
-        string += "<p>API Key: %s</p>" % c2dmuser.token
-        string += "<p>Registered devices</p>"
-
         query = db.GqlQuery("SELECT * from PiDevice WHERE owner = :1", c2dmuser.account)
         if query.count() > 0:
             devices = query.fetch(1000)
-            table = "<table><tr><th>enable</th><th>ID</th></tr>\n"
-            for dev in devices:
-                tr = "<tr><td>%s</td><td>%s</td></tr>\n" % (dev.active, dev.devid)
-                table += tr
-            table += "</table>"
-            string += table
         else:
-            string += "<p><i>No devices registered.</i></p>\n"
-        string += "<p>Send test message</p>"
-        self.response.out.write("<html><body>%s</body></html>" % string)
+            devices = None
+
+        template_values = {
+          'user': c2dmuser.account.email(),
+          'signout_url': users.create_logout_url('/'),
+          'token': c2dmuser.token,
+          'devices': devices
+        } 
+        path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
+        self.response.out.write(template.render(path, template_values))
 
 app = webapp.WSGIApplication([('/', DashBoardHandler),
                               ('/send', SendHandler),

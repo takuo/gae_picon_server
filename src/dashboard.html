@@ -1,0 +1,26 @@
+<html>
+  <head>
+   <title>Picon Dashboard - {{ user }}</title>
+  </head>
+  <body>
+    <div style='float:right'><b>{{ user }}</b> | <a href="{{ signout_url }}">Sign out</a></div>
+    <h1>Dashboard</h1>
+    <form method="POST" action="/send">
+      <input type="hidden" name="token" value="{{ token }}" />
+    <p>API Key: <b>{{ token }}</b></p>
+    <p>Registered devices</p>
+    {% if devices %}
+      <table><tr><th>enable</th><th>ID</th></tr>
+      {% for dev in devices %}
+        <tr><td><input type="checkbox" name="{{ dev.id }}" value="{{ dev.id }}"{% if dev.active %} checked{% endif %}/></td><td>{{ dev.devid }}</td></tr>
+      {% endfor %}
+      </table>
+    {% else %}
+      <blockquote style="font-style: italic">No devices registered.</blockquote>
+    {% endif %}
+    <p>Send test message</p>
+      <textarea name="message"></textarea>
+      <input type="submit" name="submit" value="Send" />
+    </form>
+  </body>
+</html>
