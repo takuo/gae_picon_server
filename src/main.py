@@ -44,20 +44,21 @@ class RegisterHandler(webapp.RequestHandler):
 
     def post(self):
         self.response.headers.add_header('Content-Type', 'application/json')
+        devregid = self.request.get('devregid')
         devid = self.request.get('devid')
-        if devid == None:
+        if devid == None or devregid == None:
             self.response.set_status(400)
             self.response.out.write("<html><body><h1>Invalid request</body></html>")
             return
 
         user = users.get_current_user()
-        q = db.GqlQuery("SELECT * FROM PiDevice WHERE owner = :1 AND id = :2" , user, devid)
+        q = db.GqlQuery("SELECT * FROM PiDevice WHERE owner = :1 AND devid = :2" , user, devid)
         if q.count() > 0:
             dev = q.get()
             dev.active = True
             dev.put()
         else:
-            dev = PiDevice(id=devid,owner=user,active=True,create=datetime.datetime.now())
+            dev = PiDevice(devregid=devregid,devid=devid,owner=user,active=True,create=datetime.datetime.now())
             dev.put()
         self.response.out.write('{"status":200}')
 
@@ -97,7 +98,7 @@ class DashBoardHandler(webapp.RequestHandler):
                                 create=datetime.datetime.now())
             c2dmuser.put()
 
-        string = "<div style='float:right'><b>%s</b> | <a href='%s'>Sign out</a></div>" % (c2dmuser.account, users.create_logout_url('/'))
+        string = "<div style='float:right'><b>%s</b> | <a href='%s'>Sign out</a></div>" % (c2dmuser.account.email(), users.create_logout_url('/'))
         string += "<h1>Dashboard</h1>"
         string += "<p>API Key: %s</p>" % c2dmuser.token
         string += "<p>Registered devices</p>"
@@ -107,7 +108,7 @@ class DashBoardHandler(webapp.RequestHandler):
             devices = query.fetch()
             table = "<table><tr><th>enable</th><th>ID</th></tr>\n"
             for dev in devices:
-                tr = "<tr><td>%s</td><td>%s</td></tr>\n" % (dev.active, dev.id)
+                tr = "<tr><td>%s</td><td>%s</td></tr>\n" % (dev.active, dev.devid)
                 table += tr
             table += "</table>"
             string += table

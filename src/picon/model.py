@@ -7,7 +7,8 @@ class PiUser(db.Model):
     create = db.DateTimeProperty(required=True)
 
 class PiDevice(db.Model):
-    id = db.StringProperty(required=True)
+    devregid = db.StringProperty(required=True)
+    devid = db.StringProperty(required=True)
     owner = db.UserProperty(required=True)
     active = db.BooleanProperty(required=True)
     create = db.DateTimeProperty(required=True)

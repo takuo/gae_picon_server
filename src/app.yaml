@@ -1,4 +1,4 @@
-application: picon
+application: c2dmsend
 version: 1
 runtime: python
 api_version: 1
