@@ -18,8 +18,12 @@
     {% endif %}
     <input type="submit" name="save" value="save changes" />
     <p>Send test message</p>
-    <input id="token" type="hidden" name="token" value="{{ token }}" />
-    <textarea id="message_text" name="message"></textarea>
+    <form method="POST" action="/send">
+    <input id="key" type="hidden" name="key" value="{{ token }}" />
+    <textarea id="text" name="text"></textarea>
+    <input type="hidden" id="event" name="event" value="test" />
+    <input type="hidden" id="priority" name="priority" value="-2" />
     <input type="submit" name="submit" value="Send" />
+    </form>
   </body>
 </html>
