@@ -5,22 +5,21 @@
   <body>
     <div style='float:right'><b>{{ user }}</b> | <a href="{{ signout_url }}">Sign out</a></div>
     <h1>Dashboard</h1>
-    <form method="POST" action="/send">
-      <input type="hidden" name="token" value="{{ token }}" />
     <p>API Key: <b>{{ token }}</b></p>
     <p>Registered devices</p>
     {% if devices %}
-      <table><tr><th>enable</th><th>ID</th></tr>
+      <table><tr><th>Device ID</th><th>enable</th></tr>
       {% for dev in devices %}
-        <tr><td><input type="checkbox" name="{{ dev.id }}" value="{{ dev.id }}"{% if dev.active %} checked{% endif %}/></td><td>{{ dev.devid }}</td></tr>
+        <tr><td>{{ dev.devid }}</td><td><input id="{{ dev.devid}}" type="checkbox" name="{{ dev.devid }}"{% if dev.active %} checked{% endif %}/></td></tr>
       {% endfor %}
       </table>
     {% else %}
       <blockquote style="font-style: italic">No devices registered.</blockquote>
     {% endif %}
+    <input type="submit" name="save" value="save changes" />
     <p>Send test message</p>
-      <textarea name="message"></textarea>
-      <input type="submit" name="submit" value="Send" />
-    </form>
+    <input id="token" type="hidden" name="token" value="{{ token }}" />
+    <textarea id="message_text" name="message"></textarea>
+    <input type="submit" name="submit" value="Send" />
   </body>
 </html>
