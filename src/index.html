@@ -1,0 +1,47 @@
+<html>
+ <head>
+   <title>Picon - Push Notification Service</title>
+ </head>
+
+
+ <body>
+  <div style="float: right">
+    {% if user %}
+      {{ user.email }} | <a href="{{ signout_url }}">サインアウト</a>
+    {% else %}
+      <a href="{{ signin_url }}">サインイン</a>
+    {% endif %}
+  </div>
+
+  <h1>Picon</h1>
+  <p>Picon はあなたのAndroid端末へプッシュメッセージを配信するAPIを提供します。</p>
+
+  <h2>要件</h2>
+  <ul>
+   <li>Android 2.2以上を搭載した端末</li>
+   <li>Googleアカウント (今のところGoogle Appsアカウントでは動作しません)</li>
+   <li>Picon Android Client アプリ</li>
+  </ul>
+
+  <h2>使い方</h2>
+  <ol>
+    <li>Piconサーバに<a href="{{ signin_url }}">サインイン</a>します</li>
+    <li>Android端末のPiconクライアントにより端末の登録をします</li>
+    <li>Piconサーバの<a href="/dashboard">ダッシュボード</a>からテストメッセージを送ります</li>
+    <li>APIをつかってメッセージを送信してみます。</li>
+  </ol>
+
+  <h2>API</h2>
+  <p>APIのベースURLは https://c2dmsend.appspot.com/api/1/ です</p>
+  <dl>
+    <dh>send (POST)</dh>
+    <dd>
+       key: API_KEY<br />
+       text: message<br />
+       event: event<br />
+       priority: priority<br .>
+    </dd>
+  </dl>
+
+ </body>
+</html>
