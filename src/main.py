@@ -157,10 +157,24 @@ class DashBoardHandler(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'dashboard.html')
         self.response.out.write(template.render(path, template_values))
 
-app = webapp.WSGIApplication([('/', DashBoardHandler),
-                              ('/send', SendHandler),
+class IndexPage(webapp.RequestHandler):
+    def get(self):
+        user = users.get_current_user() or None
+        path = os.path.join(os.path.dirname(__file__), 'index.html')
+        signin_url = users.create_login_url('/dashboard')
+        signout_url = users.create_logout_url('/')
+        template_values = {
+          'user': user,
+          'signin_url': signin_url,
+          'signout_url': signout_url
+        }
+        self.response.out.write(template.render(path, template_values))
+
+app = webapp.WSGIApplication([('/dashboard', DashBoardHandler),
+                              ('/api/1/send', SendHandler),
                               ('/register', RegisterHandler),
-                              ('/unregister', UnregisterHandler)
+                              ('/unregister', UnregisterHandler),
+                              ('/', IndexPage)
                               ], debug=True)
 
 def load_conf():
