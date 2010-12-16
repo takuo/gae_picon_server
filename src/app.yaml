@@ -5,6 +5,9 @@ api_version: 1
 
 handlers:
 
+- url: /send
+  script: main.py
+
 - url: /.*
   login: required
   script: main.py
